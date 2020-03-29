@@ -16,9 +16,9 @@ import LoadingScreen from "./LoadingScreen.js";
 function DiscoverScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text>Discover</Text>
+      <Text>Discovery</Text>
 
-      <Button 
+      <Button
         onPress={() => {
           //if(firebase.auth().currentUser){
             //console.log(fire.auth().currentUser)
@@ -26,12 +26,12 @@ function DiscoverScreen({ navigation }) {
             navigation.goBack();
             console.log(firebase.auth().currentUser)
           //}else{
-            
+
          // }
-          
+
         }}
       />
-      
+
     </View>
   );
 }
@@ -39,7 +39,7 @@ function DiscoverScreen({ navigation }) {
 export default function Home({navigation}) {
   const bottomTab = createMaterialBottomTabNavigator();
   return (
-    <bottomTab.Navigator 
+    <bottomTab.Navigator
       backBehavior='none'
       labeled='false'>
 
@@ -47,7 +47,7 @@ export default function Home({navigation}) {
         name="Discover"
         component={DiscoverScreen}
         options={{
-          
+
           tabBarIcon: ({ color, size }) => (
             <Foundation name="magnifying-glass" color={color} size={27.5} />
           ),
@@ -59,7 +59,7 @@ export default function Home({navigation}) {
         name="Collection"
         component={CollectionScreen}
         options={{
-          
+
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="library-shelves" color={color} size={27.5} />
           ),
@@ -69,10 +69,10 @@ export default function Home({navigation}) {
 
       <bottomTab.Screen
         name="Explore"
-       
+
         component={ExplorerScreen}
         options={{
-          
+
           tabBarIcon: ({ color, size }) => (
             <Entypo name="open-book" color={color} size={27.5} />
           ),
@@ -81,10 +81,10 @@ export default function Home({navigation}) {
       />
       <bottomTab.Screen
         name="Settings"
-       
+
         component={SettingsScreen}
         options={{
-          
+
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="settings" color={color} size={27.5} />
           ),
@@ -94,7 +94,7 @@ export default function Home({navigation}) {
 
       <bottomTab.Screen
         name="SignOut"
-        
+
         component={LoadingScreen}
         listeners={{
           tabPress: e =>{
@@ -103,7 +103,7 @@ export default function Home({navigation}) {
           },
         }}
         options={{
-          
+
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="logout" color={color} size={27.5} />
           ),
@@ -112,11 +112,11 @@ export default function Home({navigation}) {
       />
 
     </bottomTab.Navigator>
-    
 
-    
 
-    
+
+
+
   );
 }
 

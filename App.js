@@ -5,17 +5,13 @@ import { StyleSheet, Text, View } from "react-native";
 import Home from './src/Home.js';
 import SignInScreen from "./src/SignInScreen";
 import SignUp from "./src/SignUp";
+import { BlurView } from 'expo-blur';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoadingScreen from './src/LoadingScreen.js';
 
-
-
-
-
 import * as firebase from "firebase";
-
 
 const config = {
   apiKey: "AIzaSyBj-t6ZY9NV6NCGqtMbLLPtsIDe6irFpvo",
@@ -29,8 +25,6 @@ const config = {
 };
 // Initialize Firebase
 firebase.initializeApp(config);
-
-
 //const Stack = createStackNavigator();
 
 const AppStack= createStackNavigator();
@@ -40,18 +34,36 @@ const MainStack= createStackNavigator();
 function AppStackScreen(){
   return(
     <AppStack.Navigator backBehavior="none">
-      <AppStack.Screen name="Home" component= {Home}  />
+      <AppStack.Screen name="Home" component= {Home} options={{headerShown: false}} />
     </AppStack.Navigator>
   );
-
-  
 }
 
 function AuthStackScreen(){
   return(
     <AuthStack.Navigator>
-    <AuthStack.Screen name="SignIn" component= {SignInScreen}  />
-    <AuthStack.Screen name="Register" component= {SignUp}  />
+    <AuthStack.Screen name="SignIn" component= {SignInScreen} options={{
+    headerTitle: "Woodland",
+    headerStyle: {
+      backgroundColor: '#80bfb7',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }}
+  />
+    <AuthStack.Screen name="Register" component= {SignUp} options={{
+    headerTitle: "Register",
+    headerStyle: {
+      backgroundColor: '#80bf98',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+    headerLeft: null,
+  }}/>
   </AuthStack.Navigator>
   );
 }
@@ -59,15 +71,11 @@ function AuthStackScreen(){
 export default function App() {
     return (
       <NavigationContainer>
-
         <MainStack.Navigator initialRouteName="Loading" backBehavior='none'>
-            <MainStack.Screen name="Loading" component= {LoadingScreen}  />
-            <MainStack.Screen name="App" component= {AppStackScreen}  />
-            <MainStack.Screen name="Auth" component= {AuthStackScreen}  />
+            <MainStack.Screen name="Loading" component= {LoadingScreen} options={{headerShown: false}} />
+            <MainStack.Screen name="App" component= {AppStackScreen} options={{headerShown: false}} />
+            <MainStack.Screen name="Auth" component= {AuthStackScreen}  options={{headerShown: false}}/>
         </MainStack.Navigator>
-
       </NavigationContainer>
     );
 }
-
-

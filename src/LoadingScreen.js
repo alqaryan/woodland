@@ -3,7 +3,6 @@ import React, { useState,useEffect} from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import * as firebase from "firebase";
 
-
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
   bigBlue: {
@@ -16,14 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-
 export default function LoadingScreen({navigation}) {
-
-    
-    
-
   useEffect( () => {
     const authHandler = navigation.addListener('focus', () =>{
         firebase.auth().onAuthStateChanged(user => {
@@ -39,5 +31,3 @@ export default function LoadingScreen({navigation}) {
         </View>
     );
 }
-
-
