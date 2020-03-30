@@ -35,7 +35,7 @@ export default function DiscoverScreen({navigation}) {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={() => {
-            alert('You tapped the button!');
+            alert('Please wait when the model is loading!');
             navigation.navigate("PhotoModeScreen");
           }} >
             <FontAwesome name="photo" size={20} style={{color: 'black'}}> Choose from Library
