@@ -9,7 +9,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 //import { firestore } from '../App.js'
 //import firestore from "firebase/firestore";
-export const firestore = firebase.firestore;
+//export const firestore = firebase.firestore;
+import "firebase/firestore";
 
 export default function SignUp({navigation}) {
 
@@ -34,30 +35,22 @@ export default function SignUp({navigation}) {
       
       firebase.auth().createUserWithEmailAndPassword(emaill, passwordd)
       .then((u) => {
-          console.log("succ signup ");
+          console.log("successful signup ");
 
-          // let data = {
-          //   FSfirstName: firstnamee,
-          //   FSlastName: lastnamee,
-          //   FSusername: usernamee,
-          //   FSemail: emaill
-          // };
-          // firestore.collection("userInfo").doc("test@test.com").set(data);
-
+          let data = {
+            FSfirstName: firstnamee,
+            FSlastName: lastnamee,
+            FSusername: usernamee,
+            FSemail: emaill
+          };
           firebase
-          .firestore
+          .firestore()
           .collection("users")
           .doc(emaill)
-          .get()
-          .then(doc => {
-              this.setState({
-                FSfirstName: firstnamee,
-                FSlastName: lastnamee,
-                FSusername: usernamee,
-                FSemail: emaill
-              });
+          .set(data)
+          .catch(err => {
+            console.log("Error adding user data to firestore", err);
           });
-
       })
       .catch((err) => {
           console.log("Error: " + err.toString());
