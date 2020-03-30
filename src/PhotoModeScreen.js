@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   loadingContainer: {
-    marginTop: 80,
+    marginTop: 40,
     justifyContent: 'center'
   },
   text: {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   loadingModelContainer: {
     flexDirection: 'row',
-    marginTop: 10
+    marginTop: 5
   },
   imageWrapper: {
     width: 280,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     borderColor: '#cf667f',
     borderWidth: 5,
     borderStyle: 'dashed',
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 10,
     position: 'relative',
     justifyContent: 'center',
@@ -208,20 +208,23 @@ const styles = StyleSheet.create({
     opacity: 0.7
   },
   footer: {
-    marginTop: 35,
-    alignItems: 'center'
+    marginTop: 10,
+    alignItems: 'center',
+    height: 80,
+    position: 'absolute',
+    bottom: 0,
   },
   poweredBy: {
     fontSize: 20,
     color: '#e69e34',
-    marginBottom: 20
+    marginBottom: -5, 
   },
   tfLogo: {
-    marginTop: 5,
-    position: 'absolute',
+    bottom: 0,
     width: 200,
-    height: 90,
+    height: 60,
     resizeMode: 'contain',
+    bottom: 0,
   }
 })
 
