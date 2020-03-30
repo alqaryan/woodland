@@ -1,15 +1,11 @@
 import React, { useState, useEffect} from "react";
 import { StyleSheet, Text, View, TextInput, Button, Platform } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity } from "react-native-gesture-handler";
-//import fire from "./config/fire.js";
+
 import * as firebase from "firebase";
-//import { firestore } from '../App.js'
-//import firestore from "firebase/firestore";
-//export const firestore = firebase.firestore;
 import "firebase/firestore";
 
 export default function SignUp({navigation}) {
@@ -32,21 +28,20 @@ export default function SignUp({navigation}) {
       };
 
     const signup = (emaill, passwordd, firstnamee, lastnamee, usernamee) => {
-      
       firebase.auth().createUserWithEmailAndPassword(emaill, passwordd)
       .then((u) => {
           console.log("successful signup ");
-
           let data = {
             FSfirstName: firstnamee,
             FSlastName: lastnamee,
             FSusername: usernamee,
             FSemail: emaill
           };
+          // add user data to new document in users collection
           firebase
           .firestore()
           .collection("users")
-          .doc(emaill)
+          .doc(emaill) // document labeled with user email
           .set(data)
           .catch(err => {
             console.log("Error adding user data to firestore", err);
@@ -55,14 +50,8 @@ export default function SignUp({navigation}) {
       .catch((err) => {
           console.log("Error: " + err.toString());
       })
-
-
-
       navigation.navigate('Auth');
     }
-
-
-    
   
     return (
 
