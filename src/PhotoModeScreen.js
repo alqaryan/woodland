@@ -25,7 +25,7 @@ import Constants from 'expo-constants'
 
 import * as Permissions from 'expo-permissions'
 
-class PhotoMode extends React.Component {
+class PhotoModeScreen extends React.Component {
   state = {
     isTfReady: false,
     isModelReady: false,
@@ -45,9 +45,9 @@ class PhotoMode extends React.Component {
 
   getPermissionAsync = async () => {
     if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL)
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
       if (status !== 'granted') {
-        alert('Sorry, we need camera and camera roll permissions to make this work!')
+        alert('Sorry, we need camera roll permissions to make this work!')
       }
     }
   }
@@ -150,6 +150,7 @@ class PhotoMode extends React.Component {
         </View>
         <View style={styles.footer}>
           <Text style={styles.poweredBy}>Powered by:</Text>
+          <Image source={require('../assets/tfjs.png')} style={styles.tfLogo} />
         </View>
       </View>
     )
@@ -159,7 +160,6 @@ class PhotoMode extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     backgroundColor: '#171f24',
     alignItems: 'center'
   },
@@ -208,17 +208,21 @@ const styles = StyleSheet.create({
     opacity: 0.7
   },
   footer: {
-    marginTop: 40
+    marginTop: 35,
+    alignItems: 'center'
   },
   poweredBy: {
     fontSize: 20,
     color: '#e69e34',
-    marginBottom: 6
+    marginBottom: 20
   },
   tfLogo: {
-    width: 125,
-    height: 70
+    marginTop: 5,
+    position: 'absolute',
+    width: 200,
+    height: 90,
+    resizeMode: 'contain',
   }
 })
 
-export default PhotoMode
+export default PhotoModeScreen
