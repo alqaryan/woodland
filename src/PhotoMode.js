@@ -8,8 +8,11 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
-  AsyncStorage
 } from 'react-native'
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+const Stack = createStackNavigator();
 
 import * as tf from '@tensorflow/tfjs'
 import { fetch } from '@tensorflow/tfjs-react-native'
