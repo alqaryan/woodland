@@ -8,7 +8,8 @@ const Stack = createStackNavigator();
 
 import { FontAwesome } from '@expo/vector-icons';
 
-import PhotoMode from "./PhotoMode.js";
+import PhotoModeScreen from "./PhotoModeScreen.js";
+import CameraModeScreen from "./CameraModeScreen.js";
 
 export default function DiscoverScreen({navigation}) {
     return (
@@ -25,18 +26,21 @@ export default function DiscoverScreen({navigation}) {
               top: 0, left: 0, right: 0, bottom: 0,
             }}
           />
+
           <TouchableOpacity style={styles.button} onPress={() => {
-            alert('You tapped the button!');
+            navigation.navigate("CameraModeScreen");
           }} >
             <FontAwesome name="camera-retro" size={20} style={{color: 'black'}}> Take Photo
-           </FontAwesome>
+            </FontAwesome>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.button} onPress={() => {
-    alert('You tapped the button!');
-  }} >
-          <FontAwesome name="photo" size={20} style={{color: 'black'}}> Choose from Library
-          </FontAwesome>
-        </TouchableOpacity>
+            alert('You tapped the button!');
+            navigation.navigate("PhotoModeScreen");
+          }} >
+            <FontAwesome name="photo" size={20} style={{color: 'black'}}> Choose from Library
+            </FontAwesome>
+          </TouchableOpacity>
         </ImageBackground>
       </View>
       );

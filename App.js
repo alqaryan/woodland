@@ -13,6 +13,10 @@ import LoadingScreen from './src/LoadingScreen.js';
 
 import * as firebase from "firebase";
 
+// Test - Reng for Tensorflow
+import CameraModeScreen from './src/CameraModeScreen.js';
+import PhotoModeScreen from './src/PhotoModeScreen.js';
+
 const config = {
   apiKey: "AIzaSyBj-t6ZY9NV6NCGqtMbLLPtsIDe6irFpvo",
     authDomain: "woodland-2.firebaseapp.com",
@@ -35,6 +39,14 @@ function AppStackScreen(){
   return(
     <AppStack.Navigator backBehavior="none">
       <AppStack.Screen name="Home" component= {Home} options={{headerShown: false}} />
+      <AppStack.Screen name="PhotoModeScreen" component={PhotoModeScreen} options={{headerShown: false,
+        tabBarVisible: false, // not needed but put here in case we want to change it to tab navigation
+        header: null,
+    }} />
+      <AppStack.Screen name="CameraModeScreen" component={CameraModeScreen} options={{headerShown: false,
+        tabBarVisible: false, // same as above
+        header: null,
+    }} />
     </AppStack.Navigator>
   );
 }
