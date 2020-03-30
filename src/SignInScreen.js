@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import { Alert, StyleSheet, Text, View, TextInput, Button } from "react-native";
 
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,39 +7,29 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity } from "react-native-gesture-handler";
 //import fire from "./config/fire.js";
 import * as firebase from "firebase";
+
 const Stack = createStackNavigator();
 
 export default function SignInScreen({ navigation }) {
-  
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState(null);
 
     function login(email, password){
         firebase.auth().signInWithEmailAndPassword(email, password)
-        .catch(error => {
-            setErrorMessage(error.message);
-            console.log(error.message);
-        }
-            
-            );
+        .catch(err => {
+            setErrorMessage(err.message);
+            console.log(err.message);
+            alert(err.message);
+        });
     };
 
-    
-    
-
-    
-  
     return (
-
-        <View style={styles.container}> 
-            
-            
+        <View style={styles.container}>
             <Text style={styles.greeting}>
                 {'Welcome to Woodland!\n Sign In to discover'}
             </Text>
-            
-            
+
             <View style={styles.errorMessage}>
                 <Text></Text>
             </View>
@@ -71,9 +61,8 @@ export default function SignInScreen({ navigation }) {
                     />
                 </View>
             </View>
-            
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
                 onPress={() => login(username, password)}
                 style={styles.button}
             >
@@ -82,23 +71,16 @@ export default function SignInScreen({ navigation }) {
                 </Text>
             </TouchableOpacity>
 
-
-            <TouchableOpacity 
+            <TouchableOpacity
                 onPress={ () => navigation.navigate("Register")}
-                style={{alignSelf: "center", marginTop:32}}
+                style={{alignSelf: "center", marginTop:15}}
             >
-                
-                <Text style={{color : "#414959" , fontSize: 13}}>
-                    New Explorer? <Text style={{color: "orange", fontWeight: "500"}}>Sign up</Text> 
+                <Text style={{color : "#414959" , fontSize: 15}}>
+                    New Explorer? <Text style={{color: "orange", fontWeight: "500"}}>Sign up</Text>
                 </Text>
             </TouchableOpacity>
-            
     </View>
-    
-        
       );
-  
-   
 }
 
 
@@ -139,20 +121,14 @@ const styles = StyleSheet.create({
     height: 40,
     color: "#8A8F9E",
     fontSize: 15,
-    
   },
 
   button: {
     marginHorizontal: 30,
-    backgroundColor: "green",
+    backgroundColor: "#80bfb7",
     borderRadius: 4,
     height: 52,
     alignItems: "center",
     justifyContent: "center"
   },
-
-
-
-
-
 });

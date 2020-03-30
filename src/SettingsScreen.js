@@ -93,7 +93,6 @@ export default function SettingsScreen({ navigation }) {
             onChangeText={setEmail}
           />
         </View>
-
         <View style={{ marginTop: 5 }}>
           <Text style={styles.inputTitle}>Password</Text>
           <TextInput

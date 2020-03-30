@@ -5,16 +5,17 @@ import { StyleSheet, Text, View } from "react-native";
 import Home from './src/Home.js';
 import SignInScreen from "./src/SignInScreen";
 import SignUp from "./src/SignUp";
+import { BlurView } from 'expo-blur';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoadingScreen from './src/LoadingScreen.js';
 
-
 import * as firebase from "firebase";
 //import "firebase/firestore";
 //export const firestore = firebase.firestore();
-
+import CameraModeScreen from './src/CameraModeScreen.js';
+import PhotoModeScreen from './src/PhotoModeScreen.js';
 
 import {decode, encode} from 'base-64'
 
@@ -22,6 +23,7 @@ if (!global.btoa) {  global.btoa = encode }
 
 if (!global.atob) { global.atob = decode }
 
+// Test - Reng for Tensorflow
 const config = {
   apiKey: "AIzaSyBj-t6ZY9NV6NCGqtMbLLPtsIDe6irFpvo",
     authDomain: "woodland-2.firebaseapp.com",
@@ -34,8 +36,6 @@ const config = {
 };
 // Initialize Firebase
 firebase.initializeApp(config);
-
-
 //const Stack = createStackNavigator();
 
 const AppStack= createStackNavigator();
@@ -45,18 +45,54 @@ const MainStack= createStackNavigator();
 function AppStackScreen(){
   return(
     <AppStack.Navigator backBehavior="none">
-      <AppStack.Screen name="Home" component= {Home}  />
+      <AppStack.Screen name="Home" component= {Home} options={{headerShown: false}} />
+      <AppStack.Screen name="PhotoModeScreen" component={PhotoModeScreen} options={{
+        headerTitle: "Camera Roll",
+        headerBackTitle: 'back',
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: '#72bcd4'
+        },
+        tabBarVisible: false, // not needed but put here in case we want to change it to tab navigation
+    }} />
+      <AppStack.Screen name="CameraModeScreen" component={CameraModeScreen} options={{
+        headerTitle: "Camera",
+        headerBackTitle: 'back',
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: '#72bcd4'
+        },
+        tabBarVisible: false, // same as above
+    }} />
     </AppStack.Navigator>
   );
-
-  
 }
 
 function AuthStackScreen(){
   return(
     <AuthStack.Navigator>
-    <AuthStack.Screen name="SignIn" component= {SignInScreen}  />
-    <AuthStack.Screen name="Register" component= {SignUp}  />
+    <AuthStack.Screen name="SignIn" component= {SignInScreen} options={{
+    headerTitle: "Woodland",
+    headerStyle: {
+      backgroundColor: '#80bfb7',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }}
+  />
+    <AuthStack.Screen name="Register" component= {SignUp} options={{
+    headerTitle: "Register",
+    headerStyle: {
+      backgroundColor: '#80bf98',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+    headerLeft: null,
+  }}/>
   </AuthStack.Navigator>
   );
 }
@@ -64,15 +100,11 @@ function AuthStackScreen(){
 export default function App() {
     return (
       <NavigationContainer>
-
         <MainStack.Navigator initialRouteName="Loading" backBehavior='none'>
-            <MainStack.Screen name="Loading" component= {LoadingScreen}  />
-            <MainStack.Screen name="App" component= {AppStackScreen}  />
-            <MainStack.Screen name="Auth" component= {AuthStackScreen}  />
+            <MainStack.Screen name="Loading" component= {LoadingScreen} options={{headerShown: false}} />
+            <MainStack.Screen name="App" component= {AppStackScreen} options={{headerShown: false}} />
+            <MainStack.Screen name="Auth" component= {AuthStackScreen}  options={{headerShown: false}}/>
         </MainStack.Navigator>
-
       </NavigationContainer>
     );
 }
-
-
