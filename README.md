@@ -13,7 +13,7 @@ __Stage I: Downloading the Project__
 
 __Stage II: Installing Required Components__
 1. Install yarn via Homebrew, MacPorts, or shell script following the directions linked [here](https://classic.yarnpkg.com/en/docs/install/#mac-stable). Homebrew is a commonly recommended package manager for Mac users.
-2. From within the woodland directory, run the command `yarn install `to install the projects required dependencies. This command should be run every time a new dependency is added to the project.
+2. From within the woodland directory, run the command `yarn install` to install the projects required dependencies. This command should be run every time a new dependency is added to the project.
 3. Run the command `yarn global add expo-cli` to install the Expo-CLI 2.0 component, which is a tool used to develop React Native applications. At this point, all required project files and packages should be installed locally.
 
 __Stage III: Running the Application using iOS Simulator__
