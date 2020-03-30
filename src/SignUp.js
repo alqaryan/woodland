@@ -2,15 +2,14 @@ import React, { useState, useEffect} from "react";
 import { StyleSheet, Text, View, TextInput, Button, Platform } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity } from "react-native-gesture-handler";
 //import fire from "./config/fire.js";
 import * as firebase from "firebase";
-
-
+//import { firestore } from '../App.js'
+//import firestore from "firebase/firestore";
+export const firestore = firebase.firestore;
 
 export default function SignUp({navigation}) {
 
@@ -31,19 +30,44 @@ export default function SignUp({navigation}) {
         setDate(currentDate);
       };
 
-    const signup = (emaill, passwordd) => {
-
+    const signup = (emaill, passwordd, firstnamee, lastnamee, usernamee) => {
       
       firebase.auth().createUserWithEmailAndPassword(emaill, passwordd)
       .then((u) => {
-          console.log("succ signup");
+          console.log("succ signup ");
+
+          // let data = {
+          //   FSfirstName: firstnamee,
+          //   FSlastName: lastnamee,
+          //   FSusername: usernamee,
+          //   FSemail: emaill
+          // };
+          // firestore.collection("userInfo").doc("test@test.com").set(data);
+
+          firebase
+          .firestore
+          .collection("users")
+          .doc(emaill)
+          .get()
+          .then(doc => {
+              this.setState({
+                FSfirstName: firstnamee,
+                FSlastName: lastnamee,
+                FSusername: usernamee,
+                FSemail: emaill
+              });
+          });
+
       })
       .catch((err) => {
           console.log("Error: " + err.toString());
       })
 
+
+
       navigation.navigate('Auth');
     }
+
 
     
   
@@ -114,7 +138,7 @@ export default function SignUp({navigation}) {
             </View>
 
               <TouchableOpacity 
-                onPress={() => signup(email, password)}
+                onPress={() => signup(email, password, firstName, lastName, username)}
                 style={styles.button}
               >
                 <Text style={{color: "#FFF"}}>Sign up</Text>

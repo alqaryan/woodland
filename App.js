@@ -12,9 +12,10 @@ import LoadingScreen from './src/LoadingScreen.js';
 
 
 
-
-
 import * as firebase from "firebase";
+//import "firebase/firestore";
+//export const firestore = firebase.firestore();
+
 
 
 const config = {
