@@ -2,10 +2,6 @@
 
 **Woodland Project**
 
-**Iteration 1**
-
-**3/29/2020**
-
 This file provides instructions for downloading our project repository from github, installing the necessary components, and running the application using the Expo-CLI (command line interface) and iOS simulator. Git, yarn, and Expo all need to be correctly installed in order to successfully build and run the application according to these directions. NPM or an alternative package manager can be used instead of yarn.
 
 __Stage I: Downloading the Project__
