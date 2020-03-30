@@ -2,7 +2,7 @@
 
 **Woodland Project**
 
-This file provides instructions for downloading our project repository from github, installing the necessary components, and running the application using the Expo-CLI (command line interface) and iOS simulator. Git, yarn, and Expo all need to be correctly installed in order to successfully build and run the application according to these directions. NPM or an alternative package manager can be used instead of yarn.
+This file provides instructions for downloading our project repository from Github, installing the necessary components, and running the application using the Expo-CLI (command line interface) and iOS simulator. Git, yarn, and Expo all need to be correctly installed in order to successfully build and run the application according to these directions. NPM or an alternative package manager can be used instead of yarn.
 
 __Stage I: Downloading the Project__
 1. Download git on your local computer. Git can be downloaded [here](https://git-scm.com/downloads). 
