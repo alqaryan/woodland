@@ -8,7 +8,7 @@ __Stage I: Downloading the Project__
 1. Download git on your local computer. Git can be downloaded [here](https://git-scm.com/downloads). 
 2. Using the terminal, navigate to your workplace or the directory that you want to store our project in. Our Github repository is linked [here](https://github.com/alqaryan/woodland).
 3. Use the following terminal command to download the project to the working directory: 
-`git clone https://github.com/alqaryan/woodland.git"`
+`git clone https://github.com/alqaryan/woodland.git`
 4. Navigate to project using the command `cd woodland`
 
 __Stage II: Installing Required Components__
