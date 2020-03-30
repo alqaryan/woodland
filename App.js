@@ -12,7 +12,15 @@ import LoadingScreen from './src/LoadingScreen.js';
 
 
 import * as firebase from "firebase";
+//import "firebase/firestore";
+//export const firestore = firebase.firestore();
 
+
+import {decode, encode} from 'base-64'
+
+if (!global.btoa) {  global.btoa = encode }
+
+if (!global.atob) { global.atob = decode }
 
 const config = {
   apiKey: "AIzaSyBj-t6ZY9NV6NCGqtMbLLPtsIDe6irFpvo",
