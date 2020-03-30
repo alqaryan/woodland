@@ -22,7 +22,6 @@ if (!global.btoa) {  global.btoa = encode }
 
 if (!global.atob) { global.atob = decode }
 
-
 const config = {
   apiKey: "AIzaSyBj-t6ZY9NV6NCGqtMbLLPtsIDe6irFpvo",
     authDomain: "woodland-2.firebaseapp.com",
