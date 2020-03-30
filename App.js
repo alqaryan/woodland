@@ -39,13 +39,23 @@ function AppStackScreen(){
   return(
     <AppStack.Navigator backBehavior="none">
       <AppStack.Screen name="Home" component= {Home} options={{headerShown: false}} />
-      <AppStack.Screen name="PhotoModeScreen" component={PhotoModeScreen} options={{headerShown: false,
+      <AppStack.Screen name="PhotoModeScreen" component={PhotoModeScreen} options={{
+        headerTitle: "Camera Roll",
+        headerBackTitle: 'back',
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: '#72bcd4'
+        },
         tabBarVisible: false, // not needed but put here in case we want to change it to tab navigation
-        header: null,
     }} />
-      <AppStack.Screen name="CameraModeScreen" component={CameraModeScreen} options={{headerShown: false,
+      <AppStack.Screen name="CameraModeScreen" component={CameraModeScreen} options={{
+        headerTitle: "Camera",
+        headerBackTitle: 'back',
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: '#72bcd4'
+        },
         tabBarVisible: false, // same as above
-        header: null,
     }} />
     </AppStack.Navigator>
   );
