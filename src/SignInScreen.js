@@ -76,7 +76,7 @@ export default function SignInScreen({ navigation }) {
                 style={{alignSelf: "center", marginTop:15}}
             >
                 <Text style={{color : "#414959" , fontSize: 15}}>
-                    Already have an account? <Text style={{color: "orange", fontWeight: "500"}}>Sign in</Text>
+                    New Explorer? <Text style={{color: "orange", fontWeight: "500"}}>Sign up</Text>
                 </Text>
             </TouchableOpacity>
     </View>
