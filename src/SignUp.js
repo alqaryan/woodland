@@ -23,13 +23,12 @@ export default function SignUp({navigation}) {
         setDate(currentDate);
       };
 
-    const signup = (emaill, passwordd, firstnamee, lastnamee, usernamee) => {
+    const signup = (emaill, passwordd, firstnamee, usernamee) => {
       firebase.auth().createUserWithEmailAndPassword(emaill, passwordd)
       .then((u) => {
           console.log("successful signup ");
           let data = {
             FSfirstName: firstnamee,
-            FSlastName: lastnamee,
             FSusername: usernamee,
             FSemail: emaill
           };
@@ -60,9 +59,6 @@ export default function SignUp({navigation}) {
                   onChangeText={setFirstName}
               />
           </View>
-
-           
-
            
             <View style={{marginTop: 5}}>
               <Text style={styles.inputTitle}>email</Text>
@@ -99,7 +95,7 @@ export default function SignUp({navigation}) {
             </View>
 
               <TouchableOpacity 
-                onPress={() => signup(email, password, firstName, lastName, username)}
+                onPress={() => signup(email, password, firstName, username)}
                 style={styles.button}
               >
                 <Text style={{color: "#FFF"}}>Sign up</Text>
