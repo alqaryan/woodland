@@ -6,35 +6,15 @@ import SettingsScreen from "./SettingsScreen.js";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { DebugInstructions } from "react-native/Libraries/NewAppScreen";
+
 import ExplorerScreen from "./ExplorerScreen.js";
 import CollectionScreen from "./CollectionScreen.js";
+import DiscoverScreen from "./DiscoverScreen.js";
+
 import { Button } from "react-native-paper";
 //import fire from "./config/fire.js";
 import * as firebase from "firebase";
 import LoadingScreen from "./LoadingScreen.js";
-
-function DiscoverScreen({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <Text>Discovery</Text>
-
-      <Button
-        onPress={() => {
-          //if(firebase.auth().currentUser){
-            //console.log(fire.auth().currentUser)
-            firebase.auth().signOut();
-            navigation.goBack();
-            console.log(firebase.auth().currentUser)
-          //}else{
-
-         // }
-
-        }}
-      />
-
-    </View>
-  );
-}
 
 export default function Home({navigation}) {
   const bottomTab = createMaterialBottomTabNavigator();
@@ -110,13 +90,7 @@ export default function Home({navigation}) {
           tabBarColor: "black"
         }}
       />
-
     </bottomTab.Navigator>
-
-
-
-
-
   );
 }
 

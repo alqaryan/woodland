@@ -13,7 +13,7 @@ export default function SettingsScreen() {
         <View style={styles.container}>
             <Text>Settings</Text>
         </View>
-      );   
+      );
 }
 
 
