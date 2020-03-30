@@ -11,9 +11,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoadingScreen from './src/LoadingScreen.js';
 
 
-
-
-
 import * as firebase from "firebase";
 
 

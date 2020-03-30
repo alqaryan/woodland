@@ -17,13 +17,10 @@ export default function SignUp({navigation}) {
   //const Stack = createStackNavigator();
 
     const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");  
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [verifyEmail, setVerifyEmail] = useState("");
     const [password, setPassword] = useState("");
     const [verifyPassword, setVerifyPassword] = useState("");
-    const [date, setDate] = useState(new Date(1598051730000));
     const [errorMessage, setErrorMessage] = useState(null);
 
     const onChange = (event, selectedDate) => {
@@ -33,10 +30,20 @@ export default function SignUp({navigation}) {
 
     const signup = (emaill, passwordd) => {
 
-      
+       
       firebase.auth().createUserWithEmailAndPassword(emaill, passwordd)
       .then((u) => {
-          console.log("succ signup");
+        firebase.auth().getUserByEmail(emaill)
+        .then(function(userRecord){
+          const uid = userRecord.uid;
+          firebase.auth().updateUser(userRecord.uid,{
+            displayName: firstName,
+          })
+
+        })
+        
+
+        console.log(firebase.auth().currentUser.displayName.toString);
       })
       .catch((err) => {
           console.log("Error: " + err.toString());
@@ -45,8 +52,6 @@ export default function SignUp({navigation}) {
       navigation.navigate('Auth');
     }
 
-    
-  
     return (
 
       <View style={styles.container}>
@@ -61,22 +66,9 @@ export default function SignUp({navigation}) {
               />
           </View>
 
-            <View style={{marginTop: 5}}>
-              <Text style={styles.inputTitle}>Last Name</Text>
-              <TextInput style={styles.input}
-                  value={lastName}
-                  onChangeText={setLastName}
-              />
-            </View>
+           
 
-            <View style={{marginTop: 5}}>
-              <Text style={styles.inputTitle}>UserName</Text>
-              <TextInput style={styles.input}
-                  value={username}
-                  onChangeText={setUsername}
-              />
-            </View>
-
+           
             <View style={{marginTop: 5}}>
               <Text style={styles.inputTitle}>email</Text>
               <TextInput style={styles.input}
