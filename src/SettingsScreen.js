@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   Button,
-  Platform
+  Platform,
+  Alert
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -33,10 +34,14 @@ export default function SettingsScreen({ navigation }) {
         .updateEmail(email)
         .then(function() {
           console.log("update successful");
+          alert('Successfully updated your email!')
         })
         .catch(function(error) {
+          alert(error);
           console.log(error);
         });
+    } else {
+      alert("Enter new email");
     }
   };
 
@@ -48,10 +53,14 @@ export default function SettingsScreen({ navigation }) {
         .updatePassword(password)
         .then(function() {
           console.log("update successful");
+          alert('Successfully updated your password!');
         })
         .catch(function(error) {
+          alert(error);
           console.log(error);
         });
+    } else {
+      alert("Enter new password (Length must be at least 6)");
     }
   };
 
@@ -66,10 +75,14 @@ export default function SettingsScreen({ navigation }) {
         })
         .then(function() {
           console.log("update successful");
+          alert('Successfully updated your name!');
         })
         .catch(function(error) {
+          alert(error); 
           console.log(error);
         });
+    } else {
+      alert("Update your name");
     }
   };
 
