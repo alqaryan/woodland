@@ -18,7 +18,7 @@ export default function DiscoverScreen({navigation}) {
           <ImageBackground source={require('../assets/background2.jpg')} style={styles.backgroundImage}>
           <Header
             barStyle="light-content" // or directly
-            centerComponent={{ text: 'MY TITLE', style: { color: '#fff', fontSize: 18 } }}
+            centerComponent={{ text: 'Discover', style: { color: '#fff', fontSize: 18 } }}
             containerStyle={{
               backgroundColor: 'rgba(52, 52, 52, 0.2)',
               borderWidth: 0,
