@@ -23,20 +23,20 @@ export default function SignUp({navigation}) {
         setDate(currentDate);
       };
 
-    const signup = (emaill, passwordd, firstnamee, usernamee) => {
+    const signup = (emaill, passwordd, firstnamee) => {
       firebase.auth().createUserWithEmailAndPassword(emaill, passwordd)
       .then((u) => {
-          console.log("successful signup ");
+          console.log("successful signup");
+          const user = firebase.auth().currentUser;
           let data = {
-            FSfirstName: firstnamee,
-            FSusername: usernamee,
-            FSemail: emaill
+            fullName: firstnamee,
+            email: emaill
           };
           // add user data to new document in users collection
           firebase
           .firestore()
           .collection("users")
-          .doc(emaill) // document labeled with user email
+          .doc(user.uid) // document labeled with user email
           .set(data)
           .catch(err => {
             console.log("Error adding user data to firestore", err);
@@ -95,7 +95,7 @@ export default function SignUp({navigation}) {
             </View>
 
               <TouchableOpacity 
-                onPress={() => signup(email, password, firstName, username)}
+                onPress={() => signup(email, password, firstName)}
                 style={styles.button}
               >
                 <Text style={{color: "#FFF"}}>Sign up</Text>
