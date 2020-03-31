@@ -5,8 +5,7 @@ import {
   View,
   TextInput,
   Button,
-  Platform,
-  Alert
+  Platform
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -15,6 +14,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 //import fire from "./config/fire.js";
 import * as firebase from "firebase";
+import "firebase/firestore";
 
 export default function SettingsScreen({ navigation }) {
   //const Stack = createStackNavigator();
@@ -33,15 +33,25 @@ export default function SettingsScreen({ navigation }) {
       user
         .updateEmail(email)
         .then(function() {
-          console.log("update successful");
-          alert('Successfully updated your email!')
+          console.log("update successful for firebase authorization");
         })
         .catch(function(error) {
-          alert(error);
           console.log(error);
         });
-    } else {
-      alert("Enter new email");
+
+      firebase
+      .firestore()
+      .collection("users")
+      .doc(user.uid)
+      .update({
+        email: email
+      })
+      .then(function() {
+        console.log("update successful for firestore");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
     }
   };
 
@@ -53,14 +63,10 @@ export default function SettingsScreen({ navigation }) {
         .updatePassword(password)
         .then(function() {
           console.log("update successful");
-          alert('Successfully updated your password!');
         })
         .catch(function(error) {
-          alert(error);
           console.log(error);
         });
-    } else {
-      alert("Enter new password (Length must be at least 6)");
     }
   };
 
@@ -68,21 +74,34 @@ export default function SettingsScreen({ navigation }) {
     const user = firebase.auth().currentUser;
 
     if (firstName != "") {
+      // firebase
+      //   .auth()
+      //   .updateUser(user.uid, {
+      //     displayName: firstName
+      //   })
+      //   .then(function() {
+      //     console.log("update successful");
+      //   })
+      //   .catch(function(error) {
+      //     console.log(error);
+      //   });
+      // let data = {
+      //   FSfirstName: firstnamee,
+      //   FSemail: emaill
+      // };
       firebase
-        .auth()
-        .updateUser(user.uid, {
-          displayName: firstName
-        })
-        .then(function() {
-          console.log("update successful");
-          alert('Successfully updated your name!');
-        })
-        .catch(function(error) {
-          alert(error); 
-          console.log(error);
-        });
-    } else {
-      alert("Update your name");
+      .firestore()
+      .collection("users")
+      .doc(user.uid)
+      .update({
+        fullName: firstName
+      })
+      .then(function() {
+        console.log("update successful");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
     }
   };
 
