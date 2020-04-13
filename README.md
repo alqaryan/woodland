@@ -19,6 +19,7 @@ __Stage II: Installing Required Components__
 __Stage III: Running the Application using iOS Simulator__
 1. Using the command `expo start --ios` to build and run the mobile application on your local computer using the iOS simulator.
 2. Additional XCode components might need to be installed depending upon your device’s current developer settings. If prompted, install the required Xcode components and then restart the application. If the iOS simulator does not start and a prompt does not appear, visit the [Apple Xcode guide](https://develop.apple.com/xcode/download) to install the required developer components.
+3. If error on .bin module pops up, it is because the uploaded code on Github does not contain node_modules folder which requires some changes. To resolve this issue, after yarn install, head to app directory -> node_modules -> metro_config -> src -> defaults -> to defaults.js and defaults.js.flow, add 'bin' to the end of the list of exports.assetExts. Reopen the application again. This applies to same error potentially popping up after yarn install jest. 
 
 __Stage VI: Running Jest Tests__
 1. Install jest using the command: 'yarn install jest'
