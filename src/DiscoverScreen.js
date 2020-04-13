@@ -28,6 +28,7 @@ export default function DiscoverScreen({navigation}) {
           />
 
           <TouchableOpacity style={styles.button} onPress={() => {
+            alert('Please wait when the model is loading!');
             navigation.navigate("CameraModeScreen");
           }} >
             <FontAwesome name="camera-retro" size={20} style={{color: 'black'}}> Take Photo
