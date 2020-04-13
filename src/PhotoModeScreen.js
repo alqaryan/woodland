@@ -113,6 +113,7 @@ class PhotoModeScreen extends React.Component {
 
       if (!response.cancelled) {
         const source = { uri: response.uri }
+        // do something with saving
         this.setState({ image: source })
         this.classifyImage()
       }
@@ -120,14 +121,6 @@ class PhotoModeScreen extends React.Component {
       console.log(error)
     }
   }
-
-  // renderPrediction = prediction => {
-  //  return (
-  //    <Text key={prediction.className} style={styles.text}>
-  //      {prediction.className}
-  //   </Text>
-  //  )
-  // }
 
   renderPrediction() {
       return this.state.resultArray.map((item, index) => <Text style={styles.text}
