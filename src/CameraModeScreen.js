@@ -179,8 +179,12 @@ class PhotoModeScreen extends React.Component {
           }
         </View>
         <View style={styles.footer}>
-          <Text style={styles.poweredBy}>Powered by:</Text>
-          <Image source={require('../assets/tfjs.png')} style={styles.tfLogo} />
+          <TouchableOpacity style={{marginLeft: 15}}>
+            <Text style={styles.textStyle}>Discard</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginRight: 15}}>
+            <Text style={styles.textStyle}>Save</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -238,23 +242,19 @@ const styles = StyleSheet.create({
     opacity: 0.7
   },
   footer: {
-    marginTop: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: 'rgba(69,75,79, 0.2)',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     alignItems: 'center',
-    height: 80,
     position: 'absolute',
-    bottom: 0,
+    bottom: 0
   },
-  poweredBy: {
-    fontSize: 20,
-    color: '#e69e34',
-    marginBottom: -5,
-  },
-  tfLogo: {
-    bottom: 0,
-    width: 200,
-    height: 60,
-    resizeMode: 'contain',
-    bottom: 0,
+  textStyle:{
+    margin: 5,
+    color: '#fff',
+    fontSize:22
   }
 })
 
