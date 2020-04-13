@@ -1,10 +1,10 @@
-const SettingsScreen = require('./SettingsScreen.js');
-describe('SettingsScreen', function() {
+const CollectionScreen = require('./CollectionScreen.js');
+describe('CollectionScreen', function() {
     it('should be exist', function() {
-      expect('SettingsScreen').toBeDefined();
+      expect('CollectionScreen').toBeDefined();
     });
 
     it('should be a function', function(){
-      expect(typeof SettingsScreen).toBe("function");
+      expect(typeof CollectionScreen).toBe("function");
     })
   });

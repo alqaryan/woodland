@@ -277,3 +277,10 @@ const styles = StyleSheet.create({
 })
 
 export default CameraModeScreen
+
+try {
+  module.exports = CameraModeScreen;
+  // module.exports.helperFunction = helperFunction;
+} catch (error) {
+  console.log('we caught an error');
+}
