@@ -5,6 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import renderer from 'react-test-renderer';
 
 import * as firebase from "firebase";
 import "firebase/firestore";
@@ -147,3 +148,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 30
   },
 });
+
+// added below for Jest testing
+try {
+  module.exports = SignUp;
+} catch (error) {
+  console.log('we caught an error');
+}

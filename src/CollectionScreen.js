@@ -23,6 +23,13 @@ const styles = StyleSheet.create({
   }
 });
 
+// added below for Jest testing
+try {
+  module.exports = SettingsScreen;
+} catch (error) {
+  console.log('we caught an error');
+}
+
 // original code
 
 //import 'react-native-gesture-handler';
