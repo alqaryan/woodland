@@ -22,6 +22,7 @@ import * as jpeg from 'jpeg-js'
 
 import * as ImagePicker from 'expo-image-picker'
 import Constants from 'expo-constants'
+import * as MediaLibrary from 'expo-media-library';
 
 import * as Permissions from 'expo-permissions'
 
@@ -109,6 +110,7 @@ class PhotoModeScreen extends React.Component {
       if (!response.cancelled) {
         const source = { uri: response.uri }
         // do something with saving
+        // you may want this: const asset = await MediaLibrary.createAssetAsync(uri);
         this.setState({ image: source })
         this.classifyImage()
       }
@@ -116,14 +118,6 @@ class PhotoModeScreen extends React.Component {
       console.log(error)
     }
   }
-
-  // renderPrediction = prediction => {
-  //  return (
-  //    <Text key={prediction.className} style={styles.text}>
-  //      {prediction.className}
-  //   </Text>
-  //  )
-  // }
 
   renderPrediction() {
       return this.state.resultArray.map((item, index) => <Text style={styles.text}
@@ -136,6 +130,30 @@ class PhotoModeScreen extends React.Component {
       return <Text style={styles.text}>Can't predict</Text>;
     } else {
       return <Text style={styles.text}>{max.species}: {max.predict.toFixed(4)}</Text>;
+    }
+  }
+
+  removeImage() {
+    let clean = null;
+    if (this.state.image) {
+      this.setState({image: clean});
+      this.setState({predictions: clean})
+      console.log("Successfully removed image");
+    } else {
+      console.log("No image to remove");
+    }
+  }
+
+  saveToLibrary() {
+    if (this.state.image) {
+      const imageAssetPath = Image.resolveAssetSource(this.state.image);
+      MediaLibrary.saveToLibraryAsync(imageAssetPath.uri);
+      let clean = null;
+      this.setState({image: clean});
+      this.setState({predictions: clean})
+      console.log("Successfully saved image");
+    } else {
+      console.log("No image to save");
     }
   }
 
@@ -175,12 +193,16 @@ class PhotoModeScreen extends React.Component {
             </Text>
           )}
           {isModelReady &&
-            predictions && this.betterRenderPrediction()
+            predictions && image && this.betterRenderPrediction()
           }
         </View>
         <View style={styles.footer}>
-          <Text style={styles.poweredBy}>Powered by:</Text>
-          <Image source={require('../assets/tfjs.png')} style={styles.tfLogo} />
+          <TouchableOpacity style={{marginLeft: 15}} onPress={() => {this.removeImage();}}>
+            <Text style={styles.textStyle}>Discard</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginRight: 15}} onPress={() => {this.saveToLibrary();}}>
+            <Text style={styles.textStyle}>Save</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -238,23 +260,19 @@ const styles = StyleSheet.create({
     opacity: 0.7
   },
   footer: {
-    marginTop: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: 'rgba(69,75,79, 0.2)',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     alignItems: 'center',
-    height: 80,
     position: 'absolute',
-    bottom: 0,
+    bottom: 0
   },
-  poweredBy: {
-    fontSize: 20,
-    color: '#e69e34',
-    marginBottom: -5,
-  },
-  tfLogo: {
-    bottom: 0,
-    width: 200,
-    height: 60,
-    resizeMode: 'contain',
-    bottom: 0,
+  textStyle:{
+    margin: 5,
+    color: '#fff',
+    fontSize:22
   }
 })
 
