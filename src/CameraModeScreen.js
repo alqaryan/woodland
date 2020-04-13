@@ -119,14 +119,6 @@ class PhotoModeScreen extends React.Component {
     }
   }
 
-  // renderPrediction = prediction => {
-  //  return (
-  //    <Text key={prediction.className} style={styles.text}>
-  //      {prediction.className}
-  //   </Text>
-  //  )
-  // }
-
   renderPrediction() {
       return this.state.resultArray.map((item, index) => <Text style={styles.text}
       key={index}>{item.species}: {item.predict}</Text>);
@@ -141,10 +133,24 @@ class PhotoModeScreen extends React.Component {
     }
   }
 
+  removeImage() {
+    let clean = null;
+    if (this.state.image) {
+      this.setState({image: clean});
+      this.setState({predictions: clean})
+      console.log("Successfully removed image");
+    } else {
+      console.log("No image to remove");
+    }
+  }
+
   saveToLibrary() {
     if (this.state.image) {
       const imageAssetPath = Image.resolveAssetSource(this.state.image);
       MediaLibrary.saveToLibraryAsync(imageAssetPath.uri);
+      let clean = null;
+      this.setState({image: clean});
+      this.setState({predictions: clean})
       console.log("Successfully saved image");
     } else {
       console.log("No image to save");
@@ -187,7 +193,7 @@ class PhotoModeScreen extends React.Component {
             </Text>
           )}
           {isModelReady &&
-            predictions && this.betterRenderPrediction()
+            predictions && image && this.betterRenderPrediction()
           }
         </View>
         <View style={styles.footer}>
