@@ -111,3 +111,10 @@ const styles = StyleSheet.create({
     fontSize: 32,
   }
 });
+
+// added below for Jest testing
+try {
+  module.exports = SettingsScreen;
+} catch (error) {
+  console.log('we caught an error');
+}

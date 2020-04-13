@@ -102,3 +102,10 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+// added below for Jest testing
+try {
+  module.exports = Home;
+} catch (error) {
+  console.log('we caught an error');
+}
