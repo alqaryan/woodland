@@ -26,7 +26,7 @@ import * as MediaLibrary from 'expo-media-library';
 
 import * as Permissions from 'expo-permissions'
 
-class PhotoModeScreen extends React.Component {
+class CameraModeScreen extends React.Component {
   state = {
     isTfReady: false,
     isModelReady: false,
@@ -276,5 +276,11 @@ const styles = StyleSheet.create({
   }
 })
 
-export default PhotoModeScreen
+export default CameraModeScreen
 
+try {
+  module.exports = CameraModeScreen;
+  // module.exports.helperFunction = helperFunction;
+} catch (error) {
+  console.log('we caught an error');
+}

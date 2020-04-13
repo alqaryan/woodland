@@ -20,3 +20,7 @@ __Stage III: Running the Application using iOS Simulator__
 1. Using the command `expo start --ios` to build and run the mobile application on your local computer using the iOS simulator.
 2. Additional XCode components might need to be installed depending upon your device’s current developer settings. If prompted, install the required Xcode components and then restart the application. If the iOS simulator does not start and a prompt does not appear, visit the [Apple Xcode guide](https://develop.apple.com/xcode/download) to install the required developer components.
 
+__Stage VI: Running Jest Tests__
+1. Install jest using the command: 'yarn install jest'
+2. Run all Test Suites using the command: 'yarn test' 
+
