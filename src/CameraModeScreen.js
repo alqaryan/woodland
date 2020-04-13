@@ -22,6 +22,7 @@ import * as jpeg from 'jpeg-js'
 
 import * as ImagePicker from 'expo-image-picker'
 import Constants from 'expo-constants'
+import * as MediaLibrary from 'expo-media-library';
 
 import * as Permissions from 'expo-permissions'
 
@@ -109,6 +110,7 @@ class PhotoModeScreen extends React.Component {
       if (!response.cancelled) {
         const source = { uri: response.uri }
         // do something with saving
+        // you may want this: const asset = await MediaLibrary.createAssetAsync(uri);
         this.setState({ image: source })
         this.classifyImage()
       }
@@ -136,6 +138,16 @@ class PhotoModeScreen extends React.Component {
       return <Text style={styles.text}>Can't predict</Text>;
     } else {
       return <Text style={styles.text}>{max.species}: {max.predict.toFixed(4)}</Text>;
+    }
+  }
+
+  saveToLibrary() {
+    if (this.state.image) {
+      const imageAssetPath = Image.resolveAssetSource(this.state.image);
+      MediaLibrary.saveToLibraryAsync(imageAssetPath.uri);
+      console.log("Successfully saved image");
+    } else {
+      console.log("No image to save");
     }
   }
 
@@ -179,10 +191,10 @@ class PhotoModeScreen extends React.Component {
           }
         </View>
         <View style={styles.footer}>
-          <TouchableOpacity style={{marginLeft: 15}}>
+          <TouchableOpacity style={{marginLeft: 15}} onPress={() => {this.removeImage();}}>
             <Text style={styles.textStyle}>Discard</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{marginRight: 15}}>
+          <TouchableOpacity style={{marginRight: 15}} onPress={() => {this.saveToLibrary();}}>
             <Text style={styles.textStyle}>Save</Text>
           </TouchableOpacity>
         </View>
