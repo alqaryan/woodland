@@ -15,12 +15,12 @@
     ],
     "collectCoverage": true,
     "collectCoverageFrom": [
-    "**/*.{js,jsx}",
-    "!**/coverage/**",
-    "!**/node_modules/**",
-    "!**/babel.config.js",
-    "!**/jest.setup.js"
-  ]
+      "**/*.{js,jsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/babel.config.js",
+      "!**/jest.setup.js"
+    ]
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.1",
