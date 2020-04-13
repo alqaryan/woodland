@@ -15,7 +15,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 import * as tf from '@tensorflow/tfjs'
-import { fetch } from '@tensorflow/tfjs-react-native'
+import { fetch, decodeJpeg, bundleResourceIO } from '@tensorflow/tfjs-react-native'
 import * as mobilenet from '@tensorflow-models/mobilenet'
 
 import * as jpeg from 'jpeg-js'
@@ -30,7 +30,10 @@ class PhotoModeScreen extends React.Component {
     isTfReady: false,
     isModelReady: false,
     predictions: null,
-    image: null
+    image: null,
+    resultArray: [{species: 'daisy', predict:0}, {species: 'dandelion', predict:0}, {species: 'roses', predict:0},
+    {species: 'sunflowers', predict:0}, {species: 'tulips', predict:0}
+    ],
   }
 
   async componentDidMount() {
@@ -38,7 +41,11 @@ class PhotoModeScreen extends React.Component {
     this.setState({
       isTfReady: true
     })
-    this.model = await mobilenet.load()
+    const modelJson = require('../assets/model/model.json');
+    const modelWeights = require('../assets/model/model_weights.bin');
+    this.model = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights))
+    // console.log(JSON.stringify(this.model.outputs[0].shape));
+    // this.model.predict(tf.ones([1, 224, 224, 3])).print();
     this.setState({ isModelReady: true })
     this.getPermissionAsync()
   }
@@ -52,22 +59,23 @@ class PhotoModeScreen extends React.Component {
     }
   }
 
-  imageToTensor(rawImageData) {
-    const TO_UINT8ARRAY = true
-    const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY)
-    // Drop the alpha channel info for mobilenet
-    const buffer = new Uint8Array(width * height * 3)
-    let offset = 0 // offset into original data
+  imageToTensor(rawImageData: ArrayBuffer): tf.Tensor3D {
+    const TO_UINT8ARRAY = true;
+    const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY);
+  // Drop the alpha channel info for mobilenet
+  // need to convert to 1 * 224 * 224 * 3
+    const buffer = new Uint8Array(width * height * 3);
+    let offset = 0; // offset into original data
     for (let i = 0; i < buffer.length; i += 3) {
-      buffer[i] = data[offset]
-      buffer[i + 1] = data[offset + 1]
-      buffer[i + 2] = data[offset + 2]
-
-      offset += 4
-    }
-
-    return tf.tensor3d(buffer, [height, width, 3])
+    buffer[i] = data[offset];
+    buffer[i + 1] = data[offset + 1];
+    buffer[i + 2] = data[offset + 2];
+    offset += 4;
   }
+  const res = tf.image.resizeBilinear(tf.tensor3d(buffer, [height, width, 3]), [224, 224]);
+  // res.print(true);
+  return res;
+}
 
   classifyImage = async () => {
     try {
@@ -75,9 +83,21 @@ class PhotoModeScreen extends React.Component {
       const response = await fetch(imageAssetPath.uri, {}, { isBinary: true })
       const rawImageData = await response.arrayBuffer()
       const imageTensor = this.imageToTensor(rawImageData)
-      const predictions = await this.model.classify(imageTensor)
+      const image = tf.reshape(imageTensor, [1, 224, 224, 3])
+      // const imageTensorSum = imageTensor.sum();
+      // const imageChecksum = (await imageTensorSum.data())[0];
+      // this.model.predict(image).print();
+      const predictions = await (this.model.predict(image))
+      // console.log(predictions)
+      const values = predictions.dataSync();
+      const arr = Array.from(values);
+      // console.log(arr);
+      let tempArray = this.state.resultArray.slice();
+      for (let i = 0; i < tempArray.length; i++) {
+        tempArray[i].predict = arr[i];
+      }
       this.setState({ predictions })
-      console.log(predictions)
+      this.setState({resultArray: tempArray})
     } catch (error) {
       console.log(error)
     }
@@ -93,6 +113,7 @@ class PhotoModeScreen extends React.Component {
 
       if (!response.cancelled) {
         const source = { uri: response.uri }
+        // do something with saving
         this.setState({ image: source })
         this.classifyImage()
       }
@@ -101,12 +122,18 @@ class PhotoModeScreen extends React.Component {
     }
   }
 
-  renderPrediction = prediction => {
-    return (
-      <Text key={prediction.className} style={styles.text}>
-        {prediction.className}
-      </Text>
-    )
+  renderPrediction() {
+      return this.state.resultArray.map((item, index) => <Text style={styles.text}
+      key={index}>{item.species}: {item.predict}</Text>);
+  }
+
+  betterRenderPrediction() {
+    const max = this.state.resultArray.reduce((prev, current) => (prev.predict > current.predict) ? prev : current, 1);
+    if (max.predict < 0.8) {
+      return <Text style={styles.text}>Can't predict</Text>;
+    } else {
+      return <Text style={styles.text}>{max.species}: {max.predict.toFixed(4)}</Text>;
+    }
   }
 
   render() {
@@ -145,8 +172,8 @@ class PhotoModeScreen extends React.Component {
             </Text>
           )}
           {isModelReady &&
-            predictions &&
-            predictions.map(p => this.renderPrediction(p))}
+            predictions && this.betterRenderPrediction()
+          }
         </View>
         <View style={styles.footer}>
           <Text style={styles.poweredBy}>Powered by:</Text>
@@ -217,7 +244,7 @@ const styles = StyleSheet.create({
   poweredBy: {
     fontSize: 20,
     color: '#e69e34',
-    marginBottom: -5, 
+    marginBottom: -5,
   },
   tfLogo: {
     bottom: 0,
