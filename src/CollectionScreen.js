@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 var images = require('../assets/testflower.jpg');
+var numColumns = 2;
 
 const DATA = [
   {
@@ -56,21 +57,30 @@ function Item({ title }) {
 
 export default function CollectionScreen() {
     return (
-
+    
     <View style={styles.container}>
       <Header
         barStyle="light-content" // or directly
         centerComponent={{ text: 'Collection', style: { color: '#fff', fontSize: 18 } }}
         containerStyle={{
-          backgroundColor: 'red',
+          backgroundColor: 'red', //rgba(0,0,0,0)
           borderWidth: 0,
           position: 'absolute',
           top: 0, left: 0, right: 0, bottom: 0,
         }}
       />
-      <View style={{marginTop: 70}}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => numColumns=1} style={styles.button}>
+          <Text style={{ color: "#FFF", fontSize: 18 }}>List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => numColumns=2} style={styles.button}>
+          <Text style={{ color: "#FFF", fontSize: 18 }}>Grid</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{marginTop: 120}}>
         <FlatList
-          numColumns={2}
+          numColumns={numColumns}
+          key={numColumns}
           style={{ marginTop: 20 }}
           data={DATA}
           renderItem={({ item }) => <Item title={item.title} />}
@@ -90,15 +100,20 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5
   },
-  
-  // container: {
-  //   flex: 1,
-  //   flexDirection: 'column',
-  //   backgroundColor: "#fff",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
-
+  button: {
+    backgroundColor: "green",
+    height: 52,
+    width: 200,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  buttonContainer: {
+    position: 'absolute',
+    top: 87, left: 0, right: 0, bottom: 0,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
   item: {
     backgroundColor: '#f9c2ff',
     flex: 1,
@@ -114,7 +129,7 @@ const styles = StyleSheet.create({
 
 // added below for Jest testing
 try {
-  module.exports = SettingsScreen;
+  module.exports = CollectionScreen;
 } catch (error) {
   console.log('we caught an error');
 }
