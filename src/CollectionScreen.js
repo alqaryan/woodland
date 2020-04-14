@@ -1,5 +1,5 @@
 import React, { useState,useEffect} from "react";
-import { Alert, TouchableOpacity, StyleSheet, Text, View, FlatList } from "react-native";
+import { Alert, TouchableOpacity, StyleSheet, Text, View, FlatList, Image } from "react-native";
 import { Header } from "react-native-elements";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
@@ -9,8 +9,40 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
-var images = require('../assets/testflower.jpg');
-var numColumns = 2;
+var image1 = require('../assets/testflower.jpg');
+var image2 = require('../assets/testflower2.jpg');
+var image3 = require('../assets/testflower3.jpg');
+var image4 = require('../assets/testflower4.jpg');
+var image5 = require('../assets/testflower5.jpg');
+var image6 = require('../assets/testflower6.jpg');
+
+
+const userImages = [
+  {
+    id:"1",
+    source: image1
+  },
+  {
+    id:"2",
+    source: image2
+  },
+  {
+    id:"3",
+    source: image3
+  },
+  {
+    id:"4",
+    source: image4
+  },
+  {
+    id:"5",
+    source: image5
+  },
+  {
+    id:"6",
+    source: image6
+  },
+]
 
 const DATA = [
   {
@@ -39,15 +71,15 @@ const DATA = [
   },
   {
     id: '58694a0f-3da1-471f-bd96-145571e29d76',
-    title: 'Seven Item',
+    title: 'Seventh Item',
   },
   {
     id: '58694a0f-3da1-471f-bd96-145571e29d77',
-    title: 'Eight Item',
+    title: 'Eighth Item',
   },
 ];
 
-function Item({ title }) {
+const Item = ({ title }) => {
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
@@ -55,41 +87,56 @@ function Item({ title }) {
   );
 }
 
-export default function CollectionScreen() {
-    return (
-    
-    <View style={styles.container}>
-      <Header
-        barStyle="light-content" // or directly
-        centerComponent={{ text: 'Collection', style: { color: '#fff', fontSize: 18 } }}
-        containerStyle={{
-          backgroundColor: 'red', //rgba(0,0,0,0)
-          borderWidth: 0,
-          position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-        }}
-      />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => numColumns=1} style={styles.button}>
-          <Text style={{ color: "#FFF", fontSize: 18 }}>List</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => numColumns=2} style={styles.button}>
-          <Text style={{ color: "#FFF", fontSize: 18 }}>Grid</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{marginTop: 120}}>
-        <FlatList
-          numColumns={numColumns}
-          key={numColumns}
-          style={{ marginTop: 20 }}
-          data={DATA}
-          renderItem={({ item }) => <Item title={item.title} />}
-          keyExtractor={item => item.id}
-        />
-      </View>
-    </View>
+class CollectionScreen extends React.Component {
+  state = {
+    numColumns: 1,
+    data: userImages,
+  }
 
-  );
+  // Item({ title }) {
+  //   return (
+  //     <View style={styles.item}>
+  //       <Text style={styles.title}>{title}</Text>
+  //     </View>
+  //   );
+  // }
+
+  render() {
+      return (
+      
+      <View style={styles.container}>
+        <Header
+          barStyle="light-content" // or directly
+          centerComponent={{ text: 'Collection', style: { color: '#fff', fontSize: 18 } }}
+          containerStyle={{
+            backgroundColor: 'red', //rgba(0,0,0,0)
+            borderWidth: 0,
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+          }}
+        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => this.setState({ numColumns:1 })} style={styles.button}>
+            <Text style={{ color: "#FFF", fontSize: 18 }}>List</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.setState({ numColumns:2 })} style={styles.button}>
+            <Text style={{ color: "#FFF", fontSize: 18 }}>Grid</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{marginTop: 120}}>
+          <FlatList
+            numColumns={this.state.numColumns}
+            key={this.state.numColumns}
+            style={{ marginTop: 20 }}
+            data={this.state.data}
+            renderItem={({ item }) => <Image source={item.source} />}
+            keyExtractor={item => item.id}
+          />
+        </View>
+      </View>
+
+    );
+  }
 }
 
 const styles = StyleSheet.create({
