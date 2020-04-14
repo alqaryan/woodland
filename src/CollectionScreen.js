@@ -123,7 +123,7 @@ class CollectionScreen extends React.Component {
             <Text style={{ color: "#FFF", fontSize: 18 }}>Grid</Text>
           </TouchableOpacity>
         </View>
-        <View style={{marginTop: 120}}>
+        <View style={{marginTop: 125}}>
           <FlatList
             numColumns={this.state.numColumns}
             key={this.state.numColumns}
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     paddingRight: 5
   },
   button: {
-    backgroundColor: "green",
+    backgroundColor: "red",
     height: 52,
     width: 200,
     alignItems: "center",
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    top: 87, left: 0, right: 0, bottom: 0,
+    top: 90, left: 0, right: 0, bottom: 0,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around'
