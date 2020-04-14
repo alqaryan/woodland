@@ -22,6 +22,6 @@ __Stage III: Running the Application using iOS Simulator__
 3. If error on .bin module pops up, it is because the uploaded code on Github does not contain node_modules folder which requires some changes. To resolve this issue, after yarn install, head to app directory -> node_modules -> metro_config -> src -> defaults -> to defaults.js and defaults.js.flow, add 'bin' to the end of the list of exports.assetExts. Reopen the application again. This applies to same error potentially popping up after yarn install jest. 
 
 __Stage VI: Running Jest Tests__
-1. Install jest using the command: 'yarn install jest'
+1. Install jest using the command: 'yarn add jest-expo --dev'
 2. Run all Test Suites using the command: 'yarn test' 
 
