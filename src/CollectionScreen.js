@@ -79,31 +79,27 @@ const DATA = [
   },
 ];
 
-const Item = ({ title }) => {
+const Pic = ({ source }) => {
   return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
+    <View style={ styles.item }>
+      <Image 
+        style={ styles.image }
+        source={ source } 
+        resizeMode="cover"
+      />
     </View>
   );
 }
 
 class CollectionScreen extends React.Component {
   state = {
-    numColumns: 1,
+    numColumns: 2,
     data: userImages,
   }
 
-  // Item({ title }) {
-  //   return (
-  //     <View style={styles.item}>
-  //       <Text style={styles.title}>{title}</Text>
-  //     </View>
-  //   );
-  // }
-
   render() {
-      return (
-      
+    return (
+    
       <View style={styles.container}>
         <Header
           barStyle="light-content" // or directly
@@ -122,6 +118,10 @@ class CollectionScreen extends React.Component {
           <TouchableOpacity onPress={() => this.setState({ numColumns:2 })} style={styles.button}>
             <Text style={{ color: "#FFF", fontSize: 18 }}>Grid</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.setState({ numColumns:2 })} style={styles.button}>
+            <Text style={{ color: "#FFF", fontSize: 18 }}>Map</Text>
+          </TouchableOpacity>
+          {/* Map button should turn the flatlist invisible, make map visible */}
         </View>
         <View style={{marginTop: 125}}>
           <FlatList
@@ -129,20 +129,17 @@ class CollectionScreen extends React.Component {
             key={this.state.numColumns}
             style={{ marginTop: 20 }}
             data={this.state.data}
-            renderItem={({ item }) => <Image source={item.source} />}
+            renderItem={({ item }) => <Pic source={item.source} />}
             keyExtractor={item => item.id}
           />
         </View>
       </View>
-
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: "column",
     backgroundColor: "#fff",
     paddingLeft: 5,
     paddingRight: 5
@@ -162,12 +159,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   item: {
-    backgroundColor: '#f9c2ff',
     flex: 1,
+    backgroundColor: '#f9c2ff',
     margin: 2,
     aspectRatio: 1,
     resizeMode: 'contain',
     backgroundColor: '#ccc',
+    alignItems: "center", 
+    justifyContent: "center"
+  },
+  image: {
+    flex: 1, 
+    alignSelf: 'stretch', 
+    width: undefined, 
+    height: undefined, 
+    backgroundColor:"red"
   },
   title: {
     fontSize: 32,
