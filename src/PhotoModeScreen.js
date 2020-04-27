@@ -25,6 +25,10 @@ import Constants from 'expo-constants'
 
 import * as Permissions from 'expo-permissions'
 
+import * as firebase from "firebase";
+import "firebase/firestore";
+import "firebase/storage";
+
 class PhotoModeScreen extends React.Component {
   state = {
     isTfReady: false,
@@ -75,7 +79,84 @@ class PhotoModeScreen extends React.Component {
   const res = tf.image.resizeBilinear(tf.tensor3d(buffer, [height, width, 3]), [224, 224]);
   // res.print(true);
   return res;
-}
+  }
+
+  addToCollection = async () => {
+    const user = firebase.auth().currentUser;
+    const imagePath = Image.resolveAssetSource(this.state.image);
+    console.log(imagePath.uri + " image uri");
+
+    const imageExtension = imagePath.uri.split('.').pop(); //gets image extension
+    const filename = `${user.uid}.${Date.now()}.${imageExtension}`; // Generate name for file to be uploaded
+    console.log(filename + " new filename");
+
+    const imageBlob = this.uriToBlob(imagePath.uri); 
+    this.uriToBlob(imagePath.uri).then((blob)=>{
+
+      firebase
+        .storage()
+        .ref(`test/images/${filename}`)
+        .put(blob)
+        .on(
+          firebase.storage.TaskEvent.STATE_CHANGED,
+          snapshot => {
+            let state = {};
+            state = {
+              ...state,
+              progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Calculate progress percentage
+            };
+            if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+              console.log("upload successful");
+              alert('Identification added to you collection!');
+            }
+          },
+          error => {
+            console.log(error);
+            alert(error); 
+          }
+        );
+    }).catch((error)=>{
+      throw error;
+    });
+
+  //do I need to add to firestore as well or can we just grab from storage
+    // firebase
+    // .firestore()
+    // .collection("identifications")
+    // .add({
+    //   userID: user.uid,
+    //   predictions: this.state.predictions,
+    //   })
+    // .then(function() {
+    //   console.log("upload successful");
+    //   alert('Identification added to you collection!');
+    // })
+    // .catch(function(error) {
+    //   console.log(error);
+    //   alert(error); 
+    // });
+  }
+
+  uriToBlob = (uri) => {  
+    return new Promise((resolve, reject) => {    
+      const xhr = new XMLHttpRequest();  
+
+      xhr.onload = function() {
+        // return the blob
+        resolve(xhr.response);
+      };
+  
+      xhr.onerror = function() {
+        // something went wrong
+        reject(new Error('uriToBlob failed'));
+      };    
+      
+      // this helps us get a blob
+      xhr.responseType = 'blob';    
+      xhr.open('GET', uri, true);
+      xhr.send(null);  
+    });
+  }
 
   classifyImage = async () => {
     try {
@@ -98,6 +179,7 @@ class PhotoModeScreen extends React.Component {
       }
       this.setState({ predictions })
       this.setState({resultArray: tempArray})
+      this.addToCollection();  //upload to firestore
     } catch (error) {
       console.log(error)
     }
