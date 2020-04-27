@@ -106,8 +106,7 @@ class PhotoModeScreen extends React.Component {
               progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Calculate progress percentage
             };
             if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-              console.log("upload successful");
-              alert('Identification added to you collection!');
+              console.log("upload to firebase storage successful");
             }
           },
           error => {
@@ -115,26 +114,11 @@ class PhotoModeScreen extends React.Component {
             alert(error); 
           }
         );
+
     }).catch((error)=>{
       throw error;
     });
-
-  //do I need to add to firestore as well or can we just grab from storage
-    // firebase
-    // .firestore()
-    // .collection("identifications")
-    // .add({
-    //   userID: user.uid,
-    //   predictions: this.state.predictions,
-    //   })
-    // .then(function() {
-    //   console.log("upload successful");
-    //   alert('Identification added to you collection!');
-    // })
-    // .catch(function(error) {
-    //   console.log(error);
-    //   alert(error); 
-    // });
+    this.updateFirestore(filename);
   }
 
   uriToBlob = (uri) => {  
@@ -155,6 +139,43 @@ class PhotoModeScreen extends React.Component {
       xhr.responseType = 'blob';    
       xhr.open('GET', uri, true);
       xhr.send(null);  
+    });
+  }
+
+  updateFirestore = (filename) => {
+    const user = firebase.auth().currentUser;
+
+    // upload to new event to identifications collection
+    firebase
+    .firestore()
+    .collection("identifications")
+    .add({
+      userID: user.uid,
+      predictions: this.state.resultArray,
+      filename: filename,
+      })
+    .then(function() {
+      console.log("ident upload to firestore successful");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+    // connect identification to user profile
+    firebase
+    .firestore()
+    .collection("users")
+    .doc(user.uid)
+    .update({
+      identifications: {
+        identNum: `gs://woodland-2.appspot.com/test/images/${filename}`
+      }
+    })
+    .then(function() {
+      console.log("ident linked to user account");
+    })
+    .catch(function(error) {
+      console.log(error);
     });
   }
 
