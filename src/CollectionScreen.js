@@ -1,7 +1,8 @@
 import React, { useState,useEffect} from "react";
-import { Alert, TouchableOpacity, StyleSheet, Text, View, FlatList, Image } from "react-native";
+import { Alert, TouchableOpacity, StyleSheet, Text, View, Dimensions, FlatList, Image } from "react-native";
 import { Header } from "react-native-elements";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import MapView from 'react-native-maps';
 
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -91,11 +92,45 @@ const Pic = ({ source }) => {
   );
 }
 
+// const List = ( columns ) => {
+//   return (
+//     <View style={{marginTop: 125}}>
+//       <FlatList
+//         numColumns={ columns }
+//         key={ columns }
+//         style={{ marginTop: 20 }}
+//         data={userImages}
+//         renderItem={({ item }) => <Pic source={item.source} />}
+//         keyExtractor={item => item.id}
+//       />
+//     </View>
+//   )
+// }
+
 class CollectionScreen extends React.Component {
   state = {
     numColumns: 2,
     data: userImages,
+    listGridShow: true,
+    mapShow: false
   }
+
+  // Item({ title }) {
+  //   return (
+  //     <View style={styles.item}>
+  //       <Text style={styles.title}>{title}</Text>
+  //     </View>
+  //   );
+  // }
+
+  // toggleStatus(){
+  //   this.setState({
+  //     listGridShow:!this.state.listGridShow,
+  //     mapShow:!this.state.mapShow
+  //   });
+  //   console.log('toggle button handler: '+ this.state.status);
+  // }
+
 
   render() {
     return (
@@ -112,27 +147,56 @@ class CollectionScreen extends React.Component {
           }}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.setState({ numColumns:1 })} style={styles.button}>
+          <TouchableOpacity onPress={() => this.setState({ 
+            numColumns:1, 
+            listGridShow: true,
+            mapShow: false 
+            })} style={styles.button}>
             <Text style={{ color: "#FFF", fontSize: 18 }}>List</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.setState({ numColumns:2 })} style={styles.button}>
+          <TouchableOpacity onPress={() => this.setState({ 
+            numColumns:2, 
+            listGridShow: true,
+            mapShow: false
+            })} style={styles.button}>
             <Text style={{ color: "#FFF", fontSize: 18 }}>Grid</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.setState({ numColumns:2 })} style={styles.button}>
+          <TouchableOpacity onPress={() => this.setState({ 
+              numColumns:2, 
+              listGridShow: false,
+              mapShow: true
+            })} style={styles.button}>
             <Text style={{ color: "#FFF", fontSize: 18 }}>Map</Text>
           </TouchableOpacity>
           {/* Map button should turn the flatlist invisible, make map visible */}
         </View>
-        <View style={{marginTop: 125}}>
-          <FlatList
-            numColumns={this.state.numColumns}
-            key={this.state.numColumns}
-            style={{ marginTop: 20 }}
-            data={this.state.data}
-            renderItem={({ item }) => <Pic source={item.source} />}
-            keyExtractor={item => item.id}
-          />
-        </View>
+        {/* <List columns = {this.state.numColumns} /> */}
+        { this.state.listGridShow &&
+          <View style={{marginTop: 125}}>
+            <FlatList
+              numColumns={this.state.numColumns}
+              key={this.state.numColumns}
+              style={{ marginTop: 20 }}
+              data={this.state.data}
+              renderItem={({ item }) => <Pic source={item.source} />}
+              keyExtractor={item => item.id}
+            />
+          </View>
+        }
+        { this.state.mapShow &&
+          <View style={{marginTop: 142, alignItems: 'center'}}>
+            <MapView 
+              style={ styles.mapStyle }
+              region={{
+                latitude: 42.882004, 
+                longitude: 74.582748, 
+                latitudeDelta: 0.0922, 
+                longitudeDelta: 0.0421 
+              }}
+              showsUserLocation={true}
+              />
+          </View>
+        }
       </View>
     );
   }
@@ -177,7 +241,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-  }
+  },
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
 });
 
 // added below for Jest testing
