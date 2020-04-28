@@ -2,9 +2,13 @@ import React, { useState,useEffect} from "react";
 import { Alert, TouchableOpacity, StyleSheet, Text, View, Dimensions, FlatList, Image } from "react-native";
 import { Header } from "react-native-elements";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 import { FontAwesome } from '@expo/vector-icons';
+
+import * as firebase from "firebase";
+import "firebase/firestore";
+import "firebase/storage";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -45,41 +49,6 @@ const userImages = [
   },
 ]
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d73',
-    title: 'Fourth Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d74',
-    title: 'Fifth Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d75',
-    title: 'Sixth Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d76',
-    title: 'Seventh Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d77',
-    title: 'Eighth Item',
-  },
-];
-
 const Pic = ({ source }) => {
   return (
     <View style={ styles.item }>
@@ -92,28 +61,68 @@ const Pic = ({ source }) => {
   );
 }
 
-// const List = ( columns ) => {
-//   return (
-//     <View style={{marginTop: 125}}>
-//       <FlatList
-//         numColumns={ columns }
-//         key={ columns }
-//         style={{ marginTop: 20 }}
-//         data={userImages}
-//         renderItem={({ item }) => <Pic source={item.source} />}
-//         keyExtractor={item => item.id}
-//       />
-//     </View>
-//   )
-// }
-
 class CollectionScreen extends React.Component {
   state = {
     numColumns: 2,
     data: userImages,
     listGridShow: true,
-    mapShow: false
+    mapShow: false,
+    markers: [],
+    idents: [],
   }
+
+  componentDidMount() {
+    // this.getIdents();
+    // this.getUserImages();
+    this.createMarkers2();
+  }
+
+
+// populate data state with all user images so flatlist will for through and render all
+  getUserImages = async () => {
+    const folderRef = firebase.storage().ref("/test/images/");
+    folderRef.listAll().then((result) => {
+      result.items.forEach((imageRef) => {
+        imageRef.getDownloadURL().then((url) => { 
+          const joined = this.state.data.concat({ id: "0", source: url });
+          this.setState({ data: joined });
+        })
+      }) 
+    }).catch(function(error) {
+      console.log(error);
+    });
+    console.log(this.state.images);
+  }
+
+  // this.setState({
+  //   result: {
+  //      ...this.state.result,
+  //      [id]: value
+  //   }
+  // });
+
+// // Since you mentioned your images are in a folder,
+//     // we'll create a Reference to that folder:
+//     var storageRef = firebase.storage().ref("your_folder");
+
+
+//     // Now we get the references of these images
+//     storageRef.listAll().then(function(result) {
+//       result.items.forEach(function(imageRef) {
+//         // And finally display them
+//         displayImage(imageRef);
+//       });
+//     }).catch(function(error) {
+//       // Handle any errors
+//     });
+
+//     function displayImage(imageRef) {
+//       imageRef.getDownloadURL().then(function(url) {
+//         // TODO: Display the image on the UI
+//       }).catch(function(error) {
+//         // Handle any errors
+//       });
+//     }
 
   // Item({ title }) {
   //   return (
@@ -123,14 +132,120 @@ class CollectionScreen extends React.Component {
   //   );
   // }
 
-  // toggleStatus(){
-  //   this.setState({
-  //     listGridShow:!this.state.listGridShow,
-  //     mapShow:!this.state.mapShow
-  //   });
-  //   console.log('toggle button handler: '+ this.state.status);
-  // }
+  getIdents = async () => {
+    const user = firebase.auth().currentUser;
+    firebase
+    .firestore()
+    .collection("users")
+    .doc(user.uid) // document labeled with user email
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        const userInfo = doc;
+        const userIdents = userInfo.get('idents');
+        console.log('Document data:', doc.data());
+        console.log("userIdents: " + userIdents);
+        // userIdents.forEach(async (ident) => {
+        //   this.createMarkers(ident);
+        // });
+        // for(i=0; i<userIdents.length; i++) {
+        //   console.log(userIdents[i]);
+        //   this.createMarkers(userIdents[i]);
+        // }
+        // for(let ident of userIdents) {
+        //   this.createMarkers(ident);
+        // }
+        this.setState({ idents: userIdents });
+        console.log("state: " + this.state.idents);
+        //this.createMarkers();
 
+      }
+    })
+    .catch(error => {
+      console.log('Error getting document', error);
+    });
+  }
+
+  createMarkers = async () => {
+    console.log("in createmarkers state: " + this.state.idents);
+    const userIdents = this.state.idents;
+    console.log("in create markers userIdents: " + userIdents);
+    // for(let ident of userIdents) {
+    for(let i=0; i<userIdents.length; i++) {
+      console.log("ident received in createMarkers: " + userIdents[i]);
+      if (typeof(userIdents[i]) === 'string') {
+        console.log("isString");
+      }
+      else {
+        console.log("its not");
+      }
+      const snapshot = await firebase
+      .firestore()
+      .collection("identifications")
+      .doc(userIdents[i])
+      .get()
+      console.log(snapshot);
+      snapshot.docs.map(doc => {
+        if (!doc.exists) {
+          console.log(userIdents[i]);
+          console.log('No such document!');
+        } else {
+          // const userInfo = datdoc;
+          // const userIdents = userInfo.get('idents');
+          console.log('ident data: ', doc.data());
+        }
+      })
+      .catch(error => {
+        console.log('Error getting document', error);
+      });
+    
+      // const latlng = {latitude: 43.075, longitude: -89.403894}
+      //   this.state.markers.push(
+      //     <Marker
+      //       key="1"
+      //       identifier="1"
+      //       coordinate= { latlng }
+      //       title="test"
+      //     />
+      //   );
+      //});
+    }
+  }
+
+  createMarkers2 = async () => {
+    const user = firebase.auth().currentUser;
+
+    const snapshot = await firebase.firestore().collection("identifications").get();
+    snapshot.docs.forEach(doc => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        // const userInfo = datdoc;
+        // const userIdents = userInfo.get('idents');
+        //console.log('ident data: ', doc.data());
+        const identInfo = doc;
+        const identPhoto = identInfo.get('filename');
+        const identCoord = identInfo.get("latlng");
+        // const joined = this.state.idents.concat(identCoord);
+        // this.setState({ idents: joined })
+        console.log(identCoord);
+
+        const latlng = {latitude: 43.075, longitude: -89.403894}
+        const joined = this.state.markers.concat(
+        //this.state.markers.push(
+          <Marker
+            key={ identPhoto }
+            identifier={ identPhoto }
+            coordinate= { identCoord }
+            title={identPhoto}
+          />
+        );
+        this.setState({ markers: joined })
+      }
+    });
+  }
 
   render() {
     return (
@@ -147,11 +262,15 @@ class CollectionScreen extends React.Component {
           }}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.setState({ 
+          <TouchableOpacity onPress={() => {
+            this.setState({ 
             numColumns:1, 
             listGridShow: true,
             mapShow: false 
-            })} style={styles.button}>
+            });
+            this.getIdents();
+          }} 
+            style={styles.button}>
             <Text style={{ color: "#FFF", fontSize: 18 }}>List</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.setState({ 
@@ -165,7 +284,8 @@ class CollectionScreen extends React.Component {
               numColumns:2, 
               listGridShow: false,
               mapShow: true
-            })} style={styles.button}>
+            })} 
+          style={styles.button}>
             <Text style={{ color: "#FFF", fontSize: 18 }}>Map</Text>
           </TouchableOpacity>
           {/* Map button should turn the flatlist invisible, make map visible */}
@@ -185,16 +305,18 @@ class CollectionScreen extends React.Component {
         }
         { this.state.mapShow &&
           <View style={{marginTop: 142, alignItems: 'center'}}>
-            <MapView 
+            <MapView
               style={ styles.mapStyle }
               region={{
-                latitude: 42.882004, 
-                longitude: 74.582748, 
-                latitudeDelta: 0.0922, 
-                longitudeDelta: 0.0421 
+                latitude: 43.075, 
+                longitude: -89.403894, 
+                latitudeDelta: 0.007, 
+                longitudeDelta: 0.003 
               }}
               showsUserLocation={true}
-              />
+            >
+              {this.state.markers}
+            </MapView>
           </View>
         }
       </View>
