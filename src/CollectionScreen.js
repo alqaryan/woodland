@@ -72,149 +72,10 @@ class CollectionScreen extends React.Component {
   }
 
   componentDidMount() {
-    // this.getIdents();
-    // this.getUserImages();
-    this.createMarkers2();
-  }
-
-
-// populate data state with all user images so flatlist will for through and render all
-  getUserImages = async () => {
-    const folderRef = firebase.storage().ref("/test/images/");
-    folderRef.listAll().then((result) => {
-      result.items.forEach((imageRef) => {
-        imageRef.getDownloadURL().then((url) => { 
-          const joined = this.state.data.concat({ id: "0", source: url });
-          this.setState({ data: joined });
-        })
-      }) 
-    }).catch(function(error) {
-      console.log(error);
-    });
-    console.log(this.state.images);
-  }
-
-  // this.setState({
-  //   result: {
-  //      ...this.state.result,
-  //      [id]: value
-  //   }
-  // });
-
-// // Since you mentioned your images are in a folder,
-//     // we'll create a Reference to that folder:
-//     var storageRef = firebase.storage().ref("your_folder");
-
-
-//     // Now we get the references of these images
-//     storageRef.listAll().then(function(result) {
-//       result.items.forEach(function(imageRef) {
-//         // And finally display them
-//         displayImage(imageRef);
-//       });
-//     }).catch(function(error) {
-//       // Handle any errors
-//     });
-
-//     function displayImage(imageRef) {
-//       imageRef.getDownloadURL().then(function(url) {
-//         // TODO: Display the image on the UI
-//       }).catch(function(error) {
-//         // Handle any errors
-//       });
-//     }
-
-  // Item({ title }) {
-  //   return (
-  //     <View style={styles.item}>
-  //       <Text style={styles.title}>{title}</Text>
-  //     </View>
-  //   );
-  // }
-
-  getIdents = async () => {
-    const user = firebase.auth().currentUser;
-    firebase
-    .firestore()
-    .collection("users")
-    .doc(user.uid) // document labeled with user email
-    .get()
-    .then(doc => {
-      if (!doc.exists) {
-        console.log('No such document!');
-      } else {
-        const userInfo = doc;
-        const userIdents = userInfo.get('idents');
-        console.log('Document data:', doc.data());
-        console.log("userIdents: " + userIdents);
-        // userIdents.forEach(async (ident) => {
-        //   this.createMarkers(ident);
-        // });
-        // for(i=0; i<userIdents.length; i++) {
-        //   console.log(userIdents[i]);
-        //   this.createMarkers(userIdents[i]);
-        // }
-        // for(let ident of userIdents) {
-        //   this.createMarkers(ident);
-        // }
-        this.setState({ idents: userIdents });
-        console.log("state: " + this.state.idents);
-        //this.createMarkers();
-
-      }
-    })
-    .catch(error => {
-      console.log('Error getting document', error);
-    });
+    this.createMarkers();
   }
 
   createMarkers = async () => {
-    console.log("in createmarkers state: " + this.state.idents);
-    const userIdents = this.state.idents;
-    console.log("in create markers userIdents: " + userIdents);
-    // for(let ident of userIdents) {
-    for(let i=0; i<userIdents.length; i++) {
-      console.log("ident received in createMarkers: " + userIdents[i]);
-      if (typeof(userIdents[i]) === 'string') {
-        console.log("isString");
-      }
-      else {
-        console.log("its not");
-      }
-      const snapshot = await firebase
-      .firestore()
-      .collection("identifications")
-      .doc(userIdents[i])
-      .get()
-      console.log(snapshot);
-      snapshot.docs.map(doc => {
-        if (!doc.exists) {
-          console.log(userIdents[i]);
-          console.log('No such document!');
-        } else {
-          // const userInfo = datdoc;
-          // const userIdents = userInfo.get('idents');
-          console.log('ident data: ', doc.data());
-        }
-      })
-      .catch(error => {
-        console.log('Error getting document', error);
-      });
-    
-      // const latlng = {latitude: 43.075, longitude: -89.403894}
-      //   this.state.markers.push(
-      //     <Marker
-      //       key="1"
-      //       identifier="1"
-      //       coordinate= { latlng }
-      //       title="test"
-      //     />
-      //   );
-      //});
-    }
-  }
-
-  createMarkers2 = async () => {
     const user = firebase.auth().currentUser;
 
     const snapshot = await firebase.firestore().collection("identifications").get();
@@ -222,19 +83,10 @@ class CollectionScreen extends React.Component {
       if (!doc.exists) {
         console.log('No such document!');
       } else {
-        // const userInfo = datdoc;
-        // const userIdents = userInfo.get('idents');
-        //console.log('ident data: ', doc.data());
         const identInfo = doc;
         const identPhoto = identInfo.get('filename');
         const identCoord = identInfo.get("latlng");
-        // const joined = this.state.idents.concat(identCoord);
-        // this.setState({ idents: joined })
-        console.log(identCoord);
-
-        const latlng = {latitude: 43.075, longitude: -89.403894}
         const joined = this.state.markers.concat(
-        //this.state.markers.push(
           <Marker
             key={ identPhoto }
             identifier={ identPhoto }
@@ -262,14 +114,11 @@ class CollectionScreen extends React.Component {
           }}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => {
-            this.setState({ 
+          <TouchableOpacity onPress={() => this.setState({ 
             numColumns:1, 
             listGridShow: true,
             mapShow: false 
-            });
-            this.getIdents();
-          }} 
+            })} 
             style={styles.button}>
             <Text style={{ color: "#FFF", fontSize: 18 }}>List</Text>
           </TouchableOpacity>
