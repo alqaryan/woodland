@@ -138,9 +138,9 @@ class CameraModeScreen extends React.Component {
     if (this.state.image) {
       this.setState({image: clean});
       this.setState({predictions: clean})
-      console.log("Successfully removed image");
+      alert("Successfully removed image");
     } else {
-      console.log("No image to remove");
+      alert("No image to remove");
     }
   }
 
@@ -151,9 +151,9 @@ class CameraModeScreen extends React.Component {
       let clean = null;
       this.setState({image: clean});
       this.setState({predictions: clean})
-      console.log("Successfully saved image");
+      alert("Successfully saved image");
     } else {
-      console.log("No image to save");
+      alert("No image to save");
     }
   }
 

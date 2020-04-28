@@ -82,6 +82,7 @@ class PhotoModeScreen extends React.Component {
   }
 
   addToCollection = async () => {
+    if (this.state.image) {
     const user = firebase.auth().currentUser;
     const imagePath = Image.resolveAssetSource(this.state.image);
     console.log(imagePath.uri + " image uri");
@@ -90,7 +91,7 @@ class PhotoModeScreen extends React.Component {
     const filename = `${user.uid}.${Date.now()}.${imageExtension}`; // Generate name for file to be uploaded
     console.log(filename + " new filename");
 
-    const imageBlob = this.uriToBlob(imagePath.uri); 
+    const imageBlob = this.uriToBlob(imagePath.uri);
     this.uriToBlob(imagePath.uri).then((blob)=>{
 
       firebase
@@ -106,12 +107,12 @@ class PhotoModeScreen extends React.Component {
               progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Calculate progress percentage
             };
             if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-              console.log("upload to firebase storage successful");
+              alert("upload to firebase storage successful");
             }
           },
           error => {
             console.log(error);
-            alert(error); 
+            alert(error);
           }
         );
 
@@ -119,26 +120,29 @@ class PhotoModeScreen extends React.Component {
       throw error;
     });
     this.updateFirestore(filename);
+    alert("Successfully saved image");
+  } else {
+    alert("No image to save");
+  }
   }
 
-  uriToBlob = (uri) => {  
-    return new Promise((resolve, reject) => {    
-      const xhr = new XMLHttpRequest();  
-
+  uriToBlob = (uri) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
       xhr.onload = function() {
         // return the blob
         resolve(xhr.response);
       };
-  
+
       xhr.onerror = function() {
         // something went wrong
         reject(new Error('uriToBlob failed'));
-      };    
-      
+      };
+
       // this helps us get a blob
-      xhr.responseType = 'blob';    
+      xhr.responseType = 'blob';
       xhr.open('GET', uri, true);
-      xhr.send(null);  
+      xhr.send(null);
     });
   }
 
@@ -200,7 +204,7 @@ class PhotoModeScreen extends React.Component {
       }
       this.setState({ predictions })
       this.setState({resultArray: tempArray})
-      this.addToCollection();  //upload to firestore
+      // this.addToCollection();  //upload to firestore
     } catch (error) {
       console.log(error)
     }
@@ -236,6 +240,17 @@ class PhotoModeScreen extends React.Component {
       return <Text style={styles.text}>Can't predict</Text>;
     } else {
       return <Text style={styles.text}>{max.species}: {max.predict.toFixed(4)}</Text>;
+    }
+  }
+
+  removeImage() {
+    let clean = null;
+    if (this.state.image) {
+      this.setState({image: clean});
+      this.setState({predictions: clean})
+      alert("Successfully removed image");
+    } else {
+      alert("No image to remove");
     }
   }
 
@@ -275,12 +290,16 @@ class PhotoModeScreen extends React.Component {
             </Text>
           )}
           {isModelReady &&
-            predictions && this.betterRenderPrediction()
+            predictions && image && this.betterRenderPrediction()
           }
         </View>
         <View style={styles.footer}>
-          <Text style={styles.poweredBy}>Powered by:</Text>
-          <Image source={require('../assets/tfjs.png')} style={styles.tfLogo} />
+          <TouchableOpacity style={{marginLeft: 15}} onPress={() => {this.removeImage();}}>
+            <Text style={styles.textStyle}>Discard</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginRight: 15}} onPress={() => {this.addToCollection();}}>
+            <Text style={styles.textStyle}>Save To Collection</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -338,23 +357,19 @@ const styles = StyleSheet.create({
     opacity: 0.7
   },
   footer: {
-    marginTop: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: 'rgba(69,75,79, 0.2)',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     alignItems: 'center',
-    height: 80,
     position: 'absolute',
-    bottom: 0,
+    bottom: 0
   },
-  poweredBy: {
-    fontSize: 20,
-    color: '#e69e34',
-    marginBottom: -5,
-  },
-  tfLogo: {
-    bottom: 0,
-    width: 200,
-    height: 60,
-    resizeMode: 'contain',
-    bottom: 0,
+  textStyle:{
+    margin: 5,
+    color: '#fff',
+    fontSize:22
   }
 })
 
