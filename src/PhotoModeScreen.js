@@ -148,13 +148,16 @@ class PhotoModeScreen extends React.Component {
 
   updateFirestore = (filename) => {
     const user = firebase.auth().currentUser;
+    //const location = firebase.firestore().GeoPoint(43.075, -89.403894);
 
+    const location = new firebase.firestore.GeoPoint(43.075, -89.403894)
     // upload to new event to identifications collection
     firebase
     .firestore()
     .collection("identifications")
     .add({
       userID: user.uid,
+      latlng: location,
       predictions: this.state.resultArray,
       filename: filename,
       })
