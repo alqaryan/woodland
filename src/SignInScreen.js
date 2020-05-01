@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 //import fire from "./config/fire.js";
 import * as firebase from "firebase";
-import Expo from "expo";
+import * as Facebook from 'expo-facebook'
 
 const Stack = createStackNavigator();
 
@@ -28,21 +28,23 @@ export default function SignInScreen({ navigation }) {
 
   FBID = "222013642554489";
   FBLogin = async () => {
-    const {
-      type,
-      token,
-    } = await Expo.Facebook.logInWithReadPermissionsAsync(FBID, {
-      permissions: ["public_profile", "email"],
-    });
+    try{
+        await Facebook.initializeAsync("222013642554489");
+        const {
+            type,
+            token,
+        } = await Facebook.logInWithReadPermissionsAsync("222013642554489", {
+            permissions: ['email'],
+        });
 
-    if (type === "success") {
-      try {
-        firebase.auth().signInWithCredential(token);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      alert(type);
+        if (type === "success") {
+            const credential = firebase.auth.FacebookAuthProvider.credential(token);
+            firebase.auth().signInWithCredential(credential);
+        } else {
+          alert(type);
+        }
+    } catch(err){
+        console.error(err);
     }
   };
 
