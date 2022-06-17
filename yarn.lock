@@ -6306,10 +6306,15 @@ jetifier@^1.6.2:
   resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.5.tgz#ea87324a4230bef20a9651178ecab978ee54a8cb"
   integrity sha512-T7yzBSu9PR+DqjYt+I0KVO1XTb1QhAfHnXV5Nd3xpbXM6Xg4e3vP60Q4qkNU8Fh6PHC2PivPUNN3rY7G2MxcDQ==
 
-jpeg-js@^0.3.6, jpeg-js@^0.3.7:
+jpeg-js@^0.3.6:
   version "0.3.7"
   resolved "https://registry.yarnpkg.com/jpeg-js/-/jpeg-js-0.3.7.tgz#471a89d06011640592d314158608690172b1028d"
   integrity sha512-9IXdWudL61npZjvLuVe/ktHiA41iE8qFyLB+4VDTblEsWBzeg8WQTlktdUK4CdncUqtUgUg0bbOmTE2bKBKaBQ==
+
+jpeg-js@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/jpeg-js/-/jpeg-js-0.4.4.tgz#a9f1c6f1f9f0fa80cdb3484ed9635054d28936aa"
+  integrity sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
